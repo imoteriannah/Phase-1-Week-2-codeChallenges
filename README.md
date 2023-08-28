@@ -48,7 +48,7 @@ https://www.kra.go.ke/en/individual/calculate-tax/calculating-tax/payeLinks to a
 
 ## Github Pages Link
 
-To be added
+https://github.com/imoteriannah/Phase-1-Week-2-codeChallenges
 
 ## Support and contact details
 
