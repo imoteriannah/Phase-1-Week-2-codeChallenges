@@ -11,9 +11,9 @@ This is a repository with 3 specific code challenges to be tackled using JavaScr
 
 ## Challenge 1: Student Grade Generator (Toy Problem)
 
-    Write that prompts the user to input student marks. The input should be between 0 and 100. Then output the correct grade:
+Write that prompts the user to input student marks. The input should be between 0 and 100. Then output the correct grade:
 
-    A > 79, B - 60 to 79, C -  59 to 50, D - 40 to 49, E - less 40.
+A > 79, B - 60 to 79, C - 59 to 50, D - 40 to 49, E - less 40.
 
 ## Challenge 2: Speed Detector (Toy Problem)
 
