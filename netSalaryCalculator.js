@@ -1,12 +1,12 @@
 //get basic salary of the worker
-const basicSalary = prompt("Please enter Basic Salary");
+const basicSalary = parseFloat(prompt("Please enter Basic Salary"));
 //NSSF deduction is constant(tier1 and tier 2 but a company can choose to opt out of tier 2)
 const nssfDedcution = 1080;
 const personalRelief = 2400;
-const progressiveTaxValues = [10, 25, 30, 32.5, 35];
-const taxBrackets = [24000, 8333, 467667, 800000];
-let taxablePay = basicSalary - nssfDedcution;
-//function to get PAYE percent as at July, 2023
+const taxablePay = basicSalary - nssfDedcution;
+const nhif = nhifDeduction(basicSalary);
+const housingLevy = 0.015 * basicSalary;
+const nhifRelief = 0.15 * nhif;
 
 // PAYE rates in effect from 1 July 2023:[1]
 
@@ -18,38 +18,8 @@ let taxablePay = basicSalary - nssfDedcution;
 //     'Above 800,000' : 35.0,
 // }
 
-const taxableIncomeTax = (pay) => {
-  let taxableInc = pay;
-  let taxableIncome = 0;
-  while (taxableInc > 0) {
-    for (let i = 0; i < progressiveTaxValues.length; i++) {
-      let j = 0;
-      if (i == 4) {
-        j = 3;
-      }
-      taxableInc - taxBrackets[j];
-      taxableIncome += (taxBrackets[j] * progressiveTaxValues[i]) / 100;
-      j++;
-    }
-    return taxableIncome;
-  }
-  //   let taxPercent = 0;
-  //   if (pay <= 24000) {
-  //     taxPercent = 10;
-  //   } else if (pay > 24000 && pay <= 32333) {
-  //     taxPercent = 25;
-  //   } else if (pay >= 32334 && pay <= 500000) {
-  //     taxPercent = 30;
-  //   } else if (pay >= 500001 && pay <= 800000) {
-  //     taxPercent = 32.5;
-  //   } else if (pay > 800000) {
-  //     taxPercent = 35;
-  //   }
-  return taxPercent;
-};
-
 //function to get NHIF Deductions for the month
-const nhifDeduction = (pay) => {
+function nhifDeduction(pay) {
   let nhifDeduct = 0;
   if (pay <= 5999) {
     nhifDeduct = 150;
@@ -87,10 +57,43 @@ const nhifDeduction = (pay) => {
     nhifDeduct = 1700;
   }
   return nhifDeduct;
-};
+}
 
-//get gross salary of the worker for the month
+function calculateProgressiveTax(income) {
+  let tax = 0;
 
+  if (income == 24000) {
+    tax = income * 0.1;
+  } else if (income <= 32333) {
+    tax = 24000 * 0.1 + (income - 24000) * 0.25;
+  } else if (income <= 500000) {
+    tax = 24000 * 0.1 + 8333 * 0.25 + (income - 32333) * 0.3;
+  } else if (income <= 800000) {
+    tax = 24000 * 0.1 + 8333 * 0.25 + 467667 * 0.3 + (income - 500000) * 0.325;
+  } else if (income > 800000) {
+    tax =
+      24000 * 0.1 +
+      8333 * 0.25 +
+      467667 * 0.3 +
+      300000 * 0.325 +
+      (income - 800000) * 0.35;
+  } else if (income < 24000) {
+    tax = 0;
+  }
+
+  return tax;
+}
+
+// const income = parseFloat(prompt("Enter your income: "));
+//PAYE tax = income tax - personalRelief -NHIFRelief
+const taxToPay =
+  calculateProgressiveTax(taxablePay) - personalRelief - nhifRelief;
+
+//Pay after Tax for the month = taxToPay - nhifRelief - personalRelief
+const netIncome = taxablePay - taxToPay;
 //get Net Salary of the worker
-
+const netPay = netIncome - housingLevy - nhif;
 //Task Completed
+console.log(`Your taxable income: ${taxablePay}`);
+console.log(`Progressive tax to pay: ${taxToPay}`);
+console.log(`Net Pay(Monthly Take Home): ${netPay}`);
