@@ -59,35 +59,39 @@ function nhifDeduction(pay) {
   return nhifDeduct;
 }
 
-function calculateProgressiveTax(income) {
+function calculatePayee(income) {
   let tax = 0;
-
-  if (income == 24000) {
-    tax = income * 0.1;
-  } else if (income <= 32333) {
-    tax = 24000 * 0.1 + (income - 24000) * 0.25;
-  } else if (income <= 500000) {
-    tax = 24000 * 0.1 + 8333 * 0.25 + (income - 32333) * 0.3;
-  } else if (income <= 800000) {
-    tax = 24000 * 0.1 + 8333 * 0.25 + 467667 * 0.3 + (income - 500000) * 0.325;
-  } else if (income > 800000) {
-    tax =
-      24000 * 0.1 +
-      8333 * 0.25 +
-      467667 * 0.3 +
-      300000 * 0.325 +
-      (income - 800000) * 0.35;
-  } else if (income < 24000) {
+  let payee = 0;
+  if (basicSalary > 24000) {
+    if (income <= 24000) {
+      tax = income * 0.1;
+    } else if (income <= 32333) {
+      tax = 24000 * 0.1 + (income - 24000) * 0.25;
+    } else if (income <= 500000) {
+      tax = 24000 * 0.1 + 8333 * 0.25 + (income - 32333) * 0.3;
+    } else if (income <= 800000) {
+      tax =
+        24000 * 0.1 + 8333 * 0.25 + 467667 * 0.3 + (income - 500000) * 0.325;
+    } else if (income > 800000) {
+      tax =
+        24000 * 0.1 +
+        8333 * 0.25 +
+        467667 * 0.3 +
+        300000 * 0.325 +
+        (income - 800000) * 0.35;
+    }
+    payee = tax - personalRelief - nhifRelief;
+    return payee;
+  } else {
     tax = 0;
+    console.log(payee);
+    return payee;
   }
-
-  return tax;
 }
 
 // const income = parseFloat(prompt("Enter your income: "));
 //PAYE tax = income tax - personalRelief -NHIFRelief
-const taxToPay =
-  calculateProgressiveTax(taxablePay) - personalRelief - nhifRelief;
+const taxToPay = calculatePayee(taxablePay);
 
 //Pay after Tax for the month = taxToPay - nhifRelief - personalRelief
 const netIncome = taxablePay - taxToPay;
